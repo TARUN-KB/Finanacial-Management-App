@@ -1,369 +1,151 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_validator/InputDeco_design.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_form_validator/signin.dart';
+import 'package:projectpractice/dashboard.dart';
 
 void main() {
   runApp((MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: FormPage(),
+    home: tracker(),
   )));
 }
 
-class FormPage extends StatefulWidget {
+class tracker extends StatefulWidget {
+  const tracker({Key? key}) : super(key: key);
+
   @override
-  _FormPageState createState() => _FormPageState();
+  _trackerState createState() => _trackerState();
 }
 
-class _FormPageState extends State<FormPage> {
-
-  String name,email,phone,monthlyexpense;
-  String income,incometype,budgetmode ;
-
-  //TextController to read text entered in text field
-  TextEditingController password = TextEditingController();
-  TextEditingController confirmpassword = TextEditingController();
-
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-
+class _trackerState extends State<tracker> {
+  List<String> Months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  int _counter=0;
+  int _currentindex=0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[800],
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formkey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 70,
-                    //child: Image.network("https://protocoderspoint.com/wp-content/uploads/2020/10/PROTO-CODERS-POINT-LOGO-water-mark-.png"),
-                  ),
-                  Text("Sign Up",style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amberAccent[200]
-                  ),),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom:15,left: 10,right: 10),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      decoration: buildInputDecoration(Icons.person,"Full Name"),
-                      validator: (String value){
-                        if(value.isEmpty)
-                        {
-                          return 'Please Enter Name';
-                        }
-                        return null;
-                      },
-                      onSaved: (String value){
-                        name = value;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      decoration:buildInputDecoration(Icons.email,"Email"),
-                      validator: (String value){
-                        if(value.isEmpty)
-                        {
-                          return 'Please a Enter';
-                        }
-                        if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)){
-                          return 'Please a valid Email';
-                        }
-                        return null;
-                      },
-                      onSaved: (String value){
-                        email = value;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration:buildInputDecoration(Icons.phone,"Phone No"),
-                      validator: (String value){
-                        if(value.isEmpty)
-                        {
-                          return 'Please enter phone no ';
-                        }
-                        if(value.length !=10)
-                        {return "Enter Valid phone number";}
-
-                        return null;
-                      },
-                      onSaved: (String value){
-                        phone = value;
-                      },
-                    ),
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.fromLTRB(9, 4, 4, 4),
-                    margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue,width:1.5 ),
-                      borderRadius: BorderRadius.circular(25.0),
-                      color: Colors.grey,
-
-                    ),
-
-                    child: DropdownButtonFormField<String>(
-                      hint: Row(
-                        children: [
-                          Icon(Icons.money,color: Colors.amberAccent[200],),
-                          SizedBox(width: 13,),
-                          Text("Income",
-                          style: TextStyle(
-                            color: Colors.amberAccent[200],
-                            fontSize: 17,
-                          ),),
-                        ],
-                      ),
-                      value: income,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 24,
-                      elevation: 16,
-                      isExpanded: true,
-
-                      style: const TextStyle(color: Colors.deepPurple),
-
-                      onChanged: (newValue) {
-                        setState(() {
-                          income = newValue;
-                        });
-
-                      },
-                      items: <String>['YES', 'NO']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value,
-                          style: TextStyle(
-                            fontSize: 17,
-                              color: Colors.black
-                          ),),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
-
-                  Container(
-                    padding: EdgeInsets.fromLTRB(9, 4, 4, 4),
-                    margin: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue,width:1.5 ),
-                      borderRadius: BorderRadius.circular(25.0),
-                      color: Colors.grey,
-
-                    ),
-
-                    child: DropdownButton<String>(
-                      hint: Row(
-                        children: [
-                          Icon(Icons.money,color: Colors.amberAccent[200],),
-                          SizedBox(width: 13,),
-                          Text("Income Type",
-                            style: TextStyle(
-                              color: Colors.amberAccent[200],
-                              fontSize: 17,
-                            ),),
-                        ],
-                      ),
-                      value: incometype,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 24,
-                      elevation: 16,
-                      isExpanded: true,
-                      underline:SizedBox(),
-                      style: const TextStyle(color: Colors.deepPurple),
-
-                      onChanged: (newValue) {
-                        setState(() {
-                          incometype = newValue;
-                        });
-                      },
-                      items: <String>['Consistent', 'Inconsistent']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value,
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Colors.black
-                            ),),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.fromLTRB(9, 4, 4, 4),
-                    margin: EdgeInsets.fromLTRB(10, 5, 10, 14),
-
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.blue,width:1.5 ,),
-                      borderRadius: BorderRadius.circular(25.0),
-                    color: Colors.grey,
-
-                    ),
-
-                    child: DropdownButton<String>(
-                      hint: Row(
-                        children: [
-                          Icon(Icons.money,color: Colors.amberAccent[200],),
-                          SizedBox(width: 13,),
-                          Text("Budget Mode",
-                            style: TextStyle(
-                              color: Colors.amberAccent[200],
-
-                              fontSize: 17,
-                            ),),
-                        ],
-                      ),
-                      value: budgetmode,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 24,
-                      elevation: 16,
-                      isExpanded: true,
-                      underline:SizedBox(),
-                      style: const TextStyle(color: Colors.deepPurple),
-
-                      onChanged: (newValue) {
-                        setState(() {
-                          budgetmode = newValue;
-                        });
-                      },
-                      items: <String>['YES', 'NO']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value,
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.black
-                            ),),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration:buildInputDecoration(Icons.account_balance_wallet,"Monthly Expenditure"),
-                      validator: (String value){
-                        if(value.isEmpty)
-                        {
-                          return 'Please enter the Monthly Expenditure ';
-                        }
-
-
-                        return null;
-                      },
-                      onSaved: (String value){
-                        monthlyexpense = value;
-                      },
-                    ),
-                  ),
-
-                   //SizedBox(height: 4,),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
-                    child: TextFormField(
-                      controller: password,
-                      obscureText: true,
-                      keyboardType: TextInputType.text,
-                      decoration:buildInputDecoration(Icons.lock,"Password"),
-                      validator: (String value){
-                        if(value.isEmpty)
-                        {
-                          return 'Please Enter Password';
-                        }
-                        return null;
-                      },
-
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
-                    child: TextFormField(
-                      controller: confirmpassword,
-                      obscureText: true,
-                      keyboardType: TextInputType.text,
-                      decoration:buildInputDecoration(Icons.lock,"Confirm Password",),
-
-                      validator: (String value){
-                        if(value.isEmpty)
-                        {
-                          return 'Please re-enter password';
-                        }
-                        print(password.text);
-
-                        print(confirmpassword.text);
-
-                        if(password.text!=confirmpassword.text){
-                          return "Password does not match";
-                        }
-
-                        return null;
-                      },
-
-                    ),
-                  ),
-
-                  SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: RaisedButton(
-                      color: Colors.green,
-                      onPressed: (){
-
-                        if(_formkey.currentState.validate())
-                        {
-                          print("successful");
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>signin()));
-
-                          return;
-                        }else{
-                          print("UnSuccessfull");
-                        }
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                          side: BorderSide(color: Colors.blue,width: 2)
-                      ),
-                      textColor:Colors.white,child: Text("Submit",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20
-                    ),),
-
-                    ),
-                  )
-                ],
-              ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue[900],
+          title: Text('reach',style: TextStyle(fontSize: 45,fontFamily: 'teko'),),
+          centerTitle: true,
+            actions: [
+            IconButton(onPressed: (){},icon: Icon(
+            Icons.qr_code
+      ),
+      ),
+      ],
+          bottom: TabBar(
+            isScrollable: true,
+            indicatorColor: Colors.red,
+            indicatorSize: TabBarIndicatorSize.tab,//label
+            indicatorWeight: 3,
+            //unselectedLabelStyle: TextStyle(color: Colors.white),
+            unselectedLabelColor: Colors.white,
+            labelColor: Colors.black,
+            indicator: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              /*image: BoxDecoration(
+                   image: AssetImage('images/mypic.jpg'),
+                   fit:BoxFit.fitWidth
+                 ),*/
+              color: Colors.white,
             ),
+            tabs: [
+              Tab(child: Text("Tracker",style: TextStyle(fontSize: 20),)),
+              Tab(child: Text("Community",style: TextStyle(fontSize: 20),)),
+              Tab(child: Text("Explore",style: TextStyle(fontSize: 20),)),
+
+
+            ],
           ),
         ),
-      ),
+       drawer: dashboard(),
+
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(height: 30,),
+              Center(
+                child: SizedBox(
+                  height: 25,
+                  width: 250,
+                  child: ElevatedButton(onPressed: (){},
+
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.green[800]),
+
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)
+                          )
+                        )
+                      ), child: null,
+
+                      ),
+                ),
+              ),
+              Row(
+                children: [
+                  IconButton(onPressed: (){
+                    setState(() {
+                      if(_counter!=0)
+                        {
+                          _counter-=1;
+                        }
+                      else{
+                        _counter=11;
+                      }
+                    });
+                  },
+                      icon: Icon(Icons.arrow_left,color: Colors.blue[900],size: 35,))  ,
+
+                  Text(Months[_counter],style: TextStyle(color: Colors.blue[900],fontSize: 20),),
+
+                  IconButton(onPressed: (){
+                    setState(() {
+                      if(_counter!=11)
+                      {
+                        _counter+=1;
+                      }
+                      else{
+                        _counter=0;
+                      }
+                    });
+                  },
+                      icon: Icon(Icons.arrow_right,color: Colors.blue[900],size: 35,))  ,
+                ],
+              ),
+              Image.asset("images/fingraph.jpg"),
+
+              Center(
+                child: FlatButton(onPressed: (){},
+                    splashColor: Colors.black,
+                    color: Colors.blue[900],
+
+                    child: Text("New Payment",style: TextStyle(color: Colors.white,fontSize: 25),)),
+              ),
+
+              SizedBox(height: 20,),
+              Center(child: Image.asset("images/piechart.jpg")),
+              SizedBox(height: 20,),
+              Text("Transaction History",
+                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
+              SizedBox(height: 10,),
+              Text("Account Balance",
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25)),
+              Center(
+                child: FlatButton(onPressed: (){},
+                    color: Colors.blue[900],
+                    splashColor: Colors.black,
+                    child: Text("New Payment",style: TextStyle(color: Colors.white,fontSize: 25),)),
+              ),
+            ],
+          ),
+        ),
+
+        ),
     );
   }
 }
-
-
-
-
